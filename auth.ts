@@ -1,4 +1,4 @@
-import { NextAuthConfig } from "next-auth";
+import NextAuth, { NextAuthConfig } from "next-auth";
 import Github from "next-auth/providers/github";
 
 export const config: NextAuthConfig = {
@@ -16,5 +16,11 @@ export const config: NextAuthConfig = {
         console.log(err);
       }
     },
+    jwt({ token, trigger, session }) {
+      if (trigger === "update") token.name = session.user.name;
+      return token;
+    },
   },
 };
+
+export const { handlers, auth, signIn, signOut } = NextAuth(config);
